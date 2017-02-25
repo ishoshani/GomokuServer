@@ -3,6 +3,9 @@ import java.net.*;
 import java.util.Arrays;
 public class ClientContainer{
   static boolean showKeepAlive;
+  static int state;
+  final static int LOOKING = 1;
+  final static int GAME = 2;
   public static void main(String[] args) {
       if(args.length != 2){
         System.err.println(
@@ -27,6 +30,34 @@ public class ClientContainer{
         out.flush();
         GamePacket welcome = (GamePacket)in.readObject();
         ClientProtocol.processProcedure(welcome);
+        GomokuLogic.clearBoard(10);
+        state = LOOKING;
+        out.writeObject(new GamePacket("FINDGAME"));
+        while(state == LOOKING){
+          GamePacket response =(GamePacket)in.readObject();
+          if(response.packetType.equals("KEEPALIVE")){
+            out.writeObject(new GamePacket("WAITINGFORGAME"));
+          }else{
+            state = GAME;
+            out.writeObject(new GamePacket("BEGINPLAY"));
+          }
+        }
+        GamePacket response = (GamePacket)in.readObject();
+        if(response.packetType.equals("YOURTURN")){
+          GomokuLogic.testPiece(0,0);
+          GomokuLogic.turn *=-1;
+          out.writeObject(new GamePacket("MOVE",0,0));
+        }else if(response.packetType.equals("OTHERTURN")){
+          while(!response.packetType.equals("YOURTURN")){
+            out.writeObject(new GamePacket("WAITINGFORTURN"));
+            response = (GamePacket)in.readObject();
+          }
+          int i = response.row;
+          int j = response.col;
+          GomokuLogic.testPiece(i,j);
+          GomokuLogic.turn *=-1;
+        }
+        GomokuLogic.printBoard();
       }catch (UnknownHostException e) {
     System.err.println("Don't know about host " + hostName);
   }

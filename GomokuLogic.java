@@ -256,5 +256,17 @@ checks each direction to see if a win is found. returns the players int, 1 for w
 
         return 0;
     }
+  public static void printBoard(){
+    for (int i =0;i<size ;i++ ) {
+      String row = "";
+      for (int j =0;j<size ;j++ ) {
+        if(boardMatrix[i][j]==1){row+="w";}
+        if(boardMatrix[i][j]==-1){row+="b";}
+        else{row+="0";}
+      }
+      System.out.println(row);
+
+    }
+  }
 
 }
