@@ -49,10 +49,13 @@ public class ClientContainer{
           GomokuLogic.turn *=-1;
           out.writeObject(new GamePacket("MOVE",0,0));
         }else if(response.packetType.equals("OTHERTURN")){
+          System.out.println("sending WAITINGFORTURN");
           while(!response.packetType.equals("YOURTURN")){
             out.writeObject(new GamePacket("WAITINGFORTURN"));
             response = (GamePacket)in.readObject();
           }
+          System.out.println("GOT RESPONSE POSTING TURN");
+
           int i = response.row;
           int j = response.col;
           GomokuLogic.testPiece(i,j);
@@ -64,10 +67,12 @@ public class ClientContainer{
           GomokuLogic.turn *=-1;
           out.writeObject(new GamePacket("MOVE",2,2));
         }else if(response.packetType.equals("OTHERTURN")){
+          System.out.println("sending WAITINGFORTURN");
           while(!response.packetType.equals("YOURTURN")){
             out.writeObject(new GamePacket("WAITINGFORTURN"));
             response = (GamePacket)in.readObject();
           }
+          System.out.println("GOT RESPONSE");
           int i = response.row;
           int j = response.col;
           GomokuLogic.testPiece(i,j);

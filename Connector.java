@@ -79,7 +79,6 @@ Choice Tree for Input from client to server.
     else if(input.packetType.equals("WAITINGFORTURN")){//Handle KeepAlive while waiting on a turn
       if(CurrentGame.state==Room.DONE){
         String finishing = CurrentGame.finish();
-        CurrentGame = null;
         return new GamePacket("GAMEOVER",finishing);
       }
       return CurrentGame.getNextMessage();
