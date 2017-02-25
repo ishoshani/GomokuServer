@@ -35,7 +35,7 @@ public class ClientContainer{
         out.writeObject(new GamePacket("FINDGAME"));
         while(state == LOOKING){
           GamePacket response =(GamePacket)in.readObject();
-          if(response.packetType.equals("KEEPALIVE")){
+          if(response.packetType.equals("KEEPALIVE")||response.packetType.equals("WAITINGFORGAME")){
             out.writeObject(new GamePacket("WAITINGFORGAME"));
           }else{
             state = GAME;
@@ -43,10 +43,26 @@ public class ClientContainer{
           }
         }
         GamePacket response = (GamePacket)in.readObject();
+        //*turn 1
         if(response.packetType.equals("YOURTURN")){
           GomokuLogic.testPiece(0,0);
           GomokuLogic.turn *=-1;
           out.writeObject(new GamePacket("MOVE",0,0));
+        }else if(response.packetType.equals("OTHERTURN")){
+          while(!response.packetType.equals("YOURTURN")){
+            out.writeObject(new GamePacket("WAITINGFORTURN"));
+            response = (GamePacket)in.readObject();
+          }
+          int i = response.row;
+          int j = response.col;
+          GomokuLogic.testPiece(i,j);
+          GomokuLogic.turn *=-1;
+        }
+        //*turn 2
+        if(response.packetType.equals("YOURTURN")){
+          GomokuLogic.testPiece(2,2);
+          GomokuLogic.turn *=-1;
+          out.writeObject(new GamePacket("MOVE",2,2));
         }else if(response.packetType.equals("OTHERTURN")){
           while(!response.packetType.equals("YOURTURN")){
             out.writeObject(new GamePacket("WAITINGFORTURN"));

@@ -69,7 +69,7 @@ public class Room{
   Send Ending Message from game.
   **/
   public String finish(){
-    String s = "winner is "+playerID[turn];
+    String s = "winner is "+playerID[turnSwitch];
     return s;
   }
   /**
