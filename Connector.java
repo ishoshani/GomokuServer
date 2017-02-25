@@ -79,7 +79,7 @@ Choice Tree for Input from client to server.
     else if(input.packetType.equals("WAITINGFORTURN")){//Handle KeepAlive while waiting on a turn
       if(CurrentGame.state==Room.DONE){
         String finishing = CurrentGame.finish();
-        return new GamePacket("GAMEOVER",finishing);
+        return new GamePacket("GAMEOVER",CurrentGame.lastRow,CurrentGame.lastCol);
       }
       return CurrentGame.getNextMessage();
     }
@@ -90,7 +90,7 @@ Choice Tree for Input from client to server.
     else if(input.packetType.equals("GAMEOVER")){//When the client finds a win
       CurrentGame.SendCommand(uID, input.row,input.col);
       CurrentGame.state=Room.DONE;
-      return new GamePacket("GAMEOVER",input.row,input.col);
+      return new GamePacket("GAMEOVER");
 
     }else if(input.packetType.equals("FINDGAME")){
         synchronized (ServerContainer.roomList){

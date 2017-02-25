@@ -58,6 +58,7 @@ public class ClientContainer{
             out.writeObject(new GamePacket("WAITINGFORTURN"));
             response = (GamePacket)in.readObject();
           }
+          if(response.packetType.equals("GAMEOVER")){System.out.println("GOT GAMEOVER SIGNAL");}
           System.out.println("GOT RESPONSE POSTING TURN");
           int i = response.row;
           int j = response.col;

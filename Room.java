@@ -16,6 +16,8 @@ public class Room{
   Integer turn = 0;//whose turn it is in terms of player ID
   Integer state;
   Integer gameID;
+  int lastRow;
+  int lastCol;
   final static int WAITING = 0;
   final static int PLAYING = 1;
   final static int DONE = 2;
@@ -41,6 +43,8 @@ public class Room{
       if(id != playerID[0]){
         return "please wait your turn";
       }
+      lastRow = row;
+      lastCol = col;
       GamePacket out = new GamePacket("YOURTURN", row, col);
 
       nextMessage = out;
@@ -54,6 +58,8 @@ public class Room{
       if(id != playerID[1]){
         return "please wait your turn";
       }
+      lastRow = row;
+      lastCol = col;
       GamePacket out = new GamePacket("YOURTURN", row, col);
       nextMessage = out;
       if(state != DONE){
