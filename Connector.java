@@ -90,7 +90,7 @@ Choice Tree for Input from client to server.
     else if(input.packetType.equals("GAMEOVER")){//When the client finds a win
       CurrentGame.SendCommand(uID, input.row,input.col);
       CurrentGame.state=Room.DONE;
-      return new GamePacket("GAMEOVER");
+      return new GamePacket("GAMEOVER",input.row,input.col);
 
     }else if(input.packetType.equals("FINDGAME")){
         synchronized (ServerContainer.roomList){
@@ -111,7 +111,7 @@ Choice Tree for Input from client to server.
         }
       }else if(input.packetType.equals("RESIGN")){
         spinDown=true;
-        c = new GamePacket("SafeToExit","Have a wonderful day");
+        c = new GamePacket("SafeToExit");
         return c;
     }else{
     c = new GamePacket("ERROR");//bad Command

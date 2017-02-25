@@ -44,41 +44,32 @@ public class ClientContainer{
         }
         GamePacket response = (GamePacket)in.readObject();
         //*turn 1
+        for(int k =0; k<10; k++){
         if(response.packetType.equals("YOURTURN")){
-          GomokuLogic.testPiece(0,0);
+          System.out.println("sending WAITINGFORTURN");
+          GomokuLogic.testPiece(k,k);
           GomokuLogic.turn *=-1;
-          out.writeObject(new GamePacket("MOVE",0,0));
+          if(k<9){out.writeObject(new GamePacket("MOVE",k,k));}
+          else{out.writeObject(new GamePacket("GAMEOVER",k,k));}
+          response = (GamePacket)in.readObject();
         }else if(response.packetType.equals("OTHERTURN")){
           System.out.println("sending WAITINGFORTURN");
-          while(!response.packetType.equals("YOURTURN")){
+          while(!response.packetType.equals("YOURTURN")&&!response.packetType.equals("GAMEOVER")){
             out.writeObject(new GamePacket("WAITINGFORTURN"));
             response = (GamePacket)in.readObject();
           }
           System.out.println("GOT RESPONSE POSTING TURN");
+          int i = response.row;
+          int j = response.col;
+          GomokuLogic.testPiece(i,j);
+          GomokuLogic.turn *=-1;
+          if(response.packetType.equals("GAMEOVER")){
+            GomokuLogic.printBoard();
+            out.writeObject(new GamePacket("RESIGN"));
 
-          int i = response.row;
-          int j = response.col;
-          GomokuLogic.testPiece(i,j);
-          GomokuLogic.turn *=-1;
-        }
-        //*turn 2
-        if(response.packetType.equals("YOURTURN")){
-          GomokuLogic.testPiece(2,2);
-          GomokuLogic.turn *=-1;
-          out.writeObject(new GamePacket("MOVE",2,2));
-        }else if(response.packetType.equals("OTHERTURN")){
-          System.out.println("sending WAITINGFORTURN");
-          while(!response.packetType.equals("YOURTURN")){
-            out.writeObject(new GamePacket("WAITINGFORTURN"));
-            response = (GamePacket)in.readObject();
           }
-          System.out.println("GOT RESPONSE");
-          int i = response.row;
-          int j = response.col;
-          GomokuLogic.testPiece(i,j);
-          GomokuLogic.turn *=-1;
         }
-        GomokuLogic.printBoard();
+      }
       }catch (UnknownHostException e) {
     System.err.println("Don't know about host " + hostName);
   }
