@@ -1,3 +1,5 @@
+package com.example.isho.gomoku8;
+
 import java.io.*;
 import java.net.*;
 import java.util.Arrays;
@@ -27,7 +29,6 @@ public class ClientContainer{
         echoSocket.setSoTimeout(2000);//set timeout on server to 20 seconds. If no keepalive messages, throw error and kill connection
         String userInput;
         out.writeObject(new GamePacket("OPENCONNECTION"));//Handshake and get usage
-        out.flush();
         GamePacket welcome = (GamePacket)in.readObject();
         ClientProtocol.processProcedure(welcome);
         GomokuLogic.clearBoard(10);
@@ -64,13 +65,12 @@ public class ClientContainer{
           int j = response.col;
           GomokuLogic.testPiece(i,j);
           GomokuLogic.turn *=-1;
-          if(response.packetType.equals("GAMEOVER")){
-            GomokuLogic.printBoard();
-            out.writeObject(new GamePacket("RESIGN"));
 
-          }
         }
       }
+      out.writeObject(new GamePacket("RESIGN"));
+      GomokuLogic.printBoard();
+
       }catch (UnknownHostException e) {
     System.err.println("Don't know about host " + hostName);
   }

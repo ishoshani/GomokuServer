@@ -1,3 +1,5 @@
+package com.example.isho.gomoku8;
+
 import java.net.*;
 import java.io.*;
 /**

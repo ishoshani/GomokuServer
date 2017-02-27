@@ -1,3 +1,5 @@
+package com.example.isho.gomoku8;
+
 import java.io.*;
 import java.net.*;
 public class ServerState {

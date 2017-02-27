@@ -1,3 +1,4 @@
+package com.example.isho.gomoku8;
 
 /**
  * Created by Jason on 2/12/2017.
