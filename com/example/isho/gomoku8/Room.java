@@ -30,7 +30,8 @@ public class Room{
     players = new String[2];
     playerID = new Integer[2];
     connections = new Connector[2];
-    nextMessage = null;
+    nextMessage1 = null;
+    nextMessage2 = null;
     state = WAITING;
   }
   /**
@@ -41,7 +42,7 @@ public class Room{
   id: players ID
   String: Messsage: Payload of instructions to send to game
   **/
-  public String synchronized SendCommand(int id, int row, int col){
+  public synchronized  String SendCommand(int id, int row, int col){
     if(turn == playerID[0]){//make sure its the correct turn
       if(id != playerID[0]){
         return "please wait your turn";
@@ -110,12 +111,12 @@ public class Room{
   /**
   Use this to get status updates from game
   **/
-  public GamePacket synchronized getNextMessage(){
+  public synchronized GamePacket getNextMessage(){
     GamePacket n;
     if(turnSwitch==0){
     n = nextMessage1;
-  }else if(turnSwitch==1){
-    n = nextMessage2
+  }else{
+    n = nextMessage2;
   }
 
     if(bothConnected()){//Test that both players are connected
@@ -134,7 +135,7 @@ public class Room{
       if(turnSwitch==0){
       nextMessage1=null;
     }else if(turnSwitch==1){
-      nextMessage2=null
+      nextMessage2=null;
     }
     }
     return n;
