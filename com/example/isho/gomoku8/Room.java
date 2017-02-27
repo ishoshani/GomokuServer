@@ -13,7 +13,8 @@ public class Room{
   String[] players;
   Integer[] playerID;//Id's of players
   Connector[] connections;
-  GamePacket nextMessage;//Defines the chat packet that tells what is happening in the game
+  GamePacket nextMessage1;
+  GamePacket nextMessage2;//Defines the chat packet that tells what is happening in the game
   int turnSwitch =0;//whose turn it is in terms of player 0, 1.
   Integer turn = 0;//whose turn it is in terms of player ID
   Integer state;
@@ -49,7 +50,7 @@ public class Room{
       lastCol = col;
       GamePacket out = new GamePacket("YOURTURN", row, col);
 
-      nextMessage = out;
+      nextMessage2 = out;
       if(state != DONE){//check if game was won
         turnSwitch = 1;
         turn = playerID[turnSwitch];
@@ -63,7 +64,7 @@ public class Room{
       lastRow = row;
       lastCol = col;
       GamePacket out = new GamePacket("YOURTURN", row, col);
-      nextMessage = out;
+      nextMessage1 = out;
       if(state != DONE){
         turnSwitch=0;
         turn = playerID[turnSwitch];
@@ -111,7 +112,12 @@ public class Room{
   **/
   public GamePacket synchronized getNextMessage(){
     GamePacket n;
-    n =  nextMessage;
+    if(turnSwitch==0){
+    n = nextMessage1;
+  }else if(turnSwitch==1){
+    n = nextMessage2
+  }
+
     if(bothConnected()){//Test that both players are connected
       state=DONE;
       if(connections[0].spinDown){//Whoever is still in the room wins.
@@ -125,7 +131,11 @@ public class Room{
     if(n == null){
       n = new GamePacket("KEEPALIVE");//If no move was made, just do keepAlive
     }else{
-      nextMessage=null;
+      if(turnSwitch==0){
+      nextMessage1=null;
+    }else if(turnSwitch==1){
+      nextMessage2=null
+    }
     }
     return n;
   }
