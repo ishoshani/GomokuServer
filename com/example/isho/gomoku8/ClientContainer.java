@@ -60,7 +60,7 @@ public class ClientContainer{
             response = (GamePacket)in.readObject();
           }
           if(response.packetType.equals("GAMEOVER")){System.out.println("GOT GAMEOVER SIGNAL");}
-          System.out.println("GOT RESPONSE POSTING TURN");
+          System.out.println("GOT RESPONSE POSTING TURN"+response.row+response.col);
           int i = response.row;
           int j = response.col;
           GomokuLogic.testPiece(i,j);

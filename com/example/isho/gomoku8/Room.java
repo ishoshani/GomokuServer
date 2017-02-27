@@ -111,13 +111,16 @@ public class Room{
   /**
   Use this to get status updates from game
   **/
-  public synchronized GamePacket getNextMessage(){
+  public synchronized GamePacket getNextMessage(int id){
     GamePacket n;
-    if(turnSwitch==0){
+    n=null;
+    if(playerID[0]==id){
     n = nextMessage1;
-  }else{
+    }
+    if(playerID[1]==id){
     n = nextMessage2;
-  }
+    }
+
 
     if(bothConnected()){//Test that both players are connected
       state=DONE;
@@ -132,9 +135,9 @@ public class Room{
     if(n == null){
       n = new GamePacket("KEEPALIVE");//If no move was made, just do keepAlive
     }else{
-      if(turnSwitch==0){
+      if(playerID[0]==id){
       nextMessage1=null;
-    }else if(turnSwitch==1){
+    }else if(playerID[1]==id){
       nextMessage2=null;
     }
     }

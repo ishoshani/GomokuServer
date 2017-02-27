@@ -83,7 +83,7 @@ Choice Tree for Input from client to server.
         String finishing = CurrentGame.finish();
         return new GamePacket("GAMEOVER",CurrentGame.lastRow,CurrentGame.lastCol);
       }
-      return CurrentGame.getNextMessage();
+      return CurrentGame.getNextMessage(uID);
     }
     else if(input.packetType.equals("MOVE")){//Handle Message for Game Moves.
         CurrentGame.SendCommand(uID, input.row, input.col);
