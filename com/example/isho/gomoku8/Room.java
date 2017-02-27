@@ -40,7 +40,7 @@ public class Room{
   id: players ID
   String: Messsage: Payload of instructions to send to game
   **/
-  public String SendCommand(int id, int row, int col){
+  public String synchronized SendCommand(int id, int row, int col){
     if(turn == playerID[0]){//make sure its the correct turn
       if(id != playerID[0]){
         return "please wait your turn";
@@ -109,7 +109,7 @@ public class Room{
   /**
   Use this to get status updates from game
   **/
-  public GamePacket getNextMessage(){
+  public GamePacket synchronized getNextMessage(){
     GamePacket n;
     n =  nextMessage;
     if(bothConnected()){//Test that both players are connected
